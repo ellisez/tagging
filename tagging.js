@@ -57,7 +57,7 @@ function deg(p1, p2) {
 	return deg;
 }
 
-function lineTo(no, p1, p2, color='blue'){
+function lineTo(no, p1, p2, color='blue', api=''){
 	var element = document.getElementById('taggings');
 	
 	var tagging =  element.querySelector('div[no="'+no+'"]');
@@ -111,7 +111,7 @@ function lineTo(no, p1, p2, color='blue'){
 	
 	var tagElement = tagging.querySelector('.tagbody');
 	if (!tagElement) {
-		tagElement = tagbody();
+		tagElement = tagbody(api);
 		tagging.appendChild(tagElement);
 	}
 	var tagX = endX<0?endX-200:endX;
@@ -129,7 +129,7 @@ function tagChecked(element) {
 		}
 	}
 }
-function tagbody() {
+function tagbody(api) {
 	var tagbody = document.createElement('div');
 	tagbody.setAttribute('class', 'tagbody');
 	tagbody.onclick = function() {
@@ -147,7 +147,7 @@ function tagbody() {
 		}
 	};
 	tagbody.innerHTML='\
-<input name="api" type="text" value="'+defaultApi+'" placeholder="请输入api" title="双击访问url" ondblclick="window.open(this.value)" />\
+<input name="api" type="text" value="'+api+'" placeholder="请输入api" title="双击访问url" ondblclick="window.open(this.value)" />\
 <textarea name="decription" type="text" value="" placeholder="请输入接口描述"></textarea>\
 ';
 	return tagbody;
@@ -269,7 +269,7 @@ document.body.addEventListener('mousemove', function(event) {
 		var targetX = event.pageX || event.clientX + scrollX;
 		var targetY = event.pageY || event.clientY + scrollY;
 		
-		lineTo(no, tagging, {x:targetX, y:targetY}, defaultColor);
+		lineTo(no, tagging, {x:targetX, y:targetY}, defaultColor, defaultApi);
 	}
 }, false);
 
