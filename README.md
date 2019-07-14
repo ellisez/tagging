@@ -11,3 +11,9 @@ Tagging 可以轻松便捷的在html页面上做涂鸦，比如说axure导出的
 在html的body末尾引入下列js
 
 <script type="text/javascript" src="http://www.idearfly.com/js/tagging.js" />
+
+# src的参数
+http://www.idearfly.com/js/tagging.js?api=xxx&color=red
+
+api是默认的地址
+color是涂鸦的颜色
