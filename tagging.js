@@ -147,8 +147,8 @@ function tagbody() {
 		}
 	};
 	tagbody.innerHTML='\
-<input name="api" type="text" value="" placeholder="请输入api" ondblclick="window.open(this.value)" />\
-<input name="decription" type="text" value="" placeholder="请输入接口描述" />\
+<input name="api" type="text" value="'+defaultApi+'" placeholder="请输入api" title="双击访问url" ondblclick="window.open(this.value)" />\
+<textarea name="decription" type="text" value="" placeholder="请输入接口描述"></textarea>\
 ';
 	return tagbody;
 }
@@ -162,11 +162,28 @@ function findParent(element) {
 		return findParent(element.parentNode);
 	}
 }
+function urlparams(url) {
+	var result = {};
+	var searchArray = url.split('?');
+	if (searchArray.length>1) {
+		search = searchArray[1];
+		var paramStrings=search.split('&');
+		for (var paramString of paramStrings) {
+			var paramArray = paramString.split('=');
+			if (paramArray.length>=2) {
+				result[paramArray[0]]=decodeURI(paramArray[1]);
+			}
+		}
+	}
+	return result;
+}
 (function() {
 
 status = 0;//0 gone,1 doing
 tagging={x:0, y:0};
 no = -1;
+defaultApi='';
+defaultColor='blue';
 
 document.body.style.position = 'relative';
 
@@ -174,42 +191,51 @@ var element = document.createElement('div');
 element.setAttribute('id', 'taggings');
 document.body.appendChild(element);
 
-loadCssCode('\
-.tagbody {\
-	position: absolute;\
-	width: 200px;\
-	overflow: visible;\
-	background-color:#ececec;\
-	display: flex;\
-	flex-direction: column;\
-	justify-content: flex-start;\
-	align-items: stretch;\
-	box-sizing: border-box;\
-	border:4px solid #ececec;\
-}\
-.tagbody[checked="true"] {\
-	border-color:blue;\
-	\
-}\
-[name="api",not([value=""]) {\
-	border:none;\
-	background:none;\
-	text-decoration: underline;\
-}\
-[name="api"]:focus {\
-	border:inherit;\
-	background:inherit;\
-	text-decoration: none;\
-}\
-\
-[name="decription"] {\
-	border:none;\
-	background:none;\
-}\
-[name="decription"]:focus {\
-	border:inherit;\
-	background:inherit;\
-}\
+var script=document.querySelector('script[src*="tagging.js"]');
+if (script) {
+	var url = script.getAttribute('src');
+	var params = urlparams(url);
+	defaultApi=params['api'] || '';
+	defaultColor=params['color'] || 'blue';
+}
+
+loadCssCode('\n\
+.tagbody {\n\
+	position: absolute;\n\
+	width: 200px;\n\
+	overflow: visible;\n\
+	background-color:#ececec;\n\
+	display: flex;\n\
+	flex-direction: column;\n\
+	justify-content: flex-start;\n\
+	align-items: stretch;\n\
+	box-sizing: border-box;\n\
+	border:4px solid #ececec;\n\
+}\n\
+.tagbody[checked="true"] {\n\
+	border-color:'+defaultColor+';\n\
+	\n\
+}\n\
+.tagbody [name="api"] {\n\
+	border:none;\n\
+	background:white;\n\
+	text-decoration: underline;\n\
+	color: blue;\n\
+}\n\
+.tagbody [name="api"]:focus {\n\
+	text-decoration: none;\n\
+	color: red;\n\
+}\n\
+\n\
+.tagbody [name="decription"] {\n\
+	background:white;\n\
+	resize: vertical;\n\
+	color: blue;\n\
+}\n\
+.tagbody [name="decription"]:focus {\n\
+	background:none;\n\
+	color: red;\n\
+}\n\
 ');
 
 document.body.onkeydown = function(event) {
@@ -243,7 +269,7 @@ document.body.addEventListener('mousemove', function(event) {
 		var targetX = event.pageX || event.clientX + scrollX;
 		var targetY = event.pageY || event.clientY + scrollY;
 		
-		lineTo(no, tagging, {x:targetX, y:targetY});
+		lineTo(no, tagging, {x:targetX, y:targetY}, defaultColor);
 	}
 }, false);
 
