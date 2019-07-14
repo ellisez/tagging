@@ -6,3 +6,8 @@ Tagging 可以轻松便捷的在html页面上做涂鸦，比如说axure导出的
 2. 左键选中
 3. del键删除当前选中项
 4. ctrl+s下载涂鸦后的文件
+
+# 安装
+在html的body末尾引入下列js
+
+<script type="text/javascript" src="http://www.idearfly.com/js/tagging.js"></script>
