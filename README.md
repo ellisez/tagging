@@ -10,4 +10,4 @@ Tagging 可以轻松便捷的在html页面上做涂鸦，比如说axure导出的
 # 安装
 在html的body末尾引入下列js
 
-<script type="text/javascript" src="http://www.idearfly.com/js/tagging.js"></script>
+<script type="text/javascript" src="http://www.idearfly.com/js/tagging.js" />
