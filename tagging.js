@@ -1,4 +1,3 @@
-
 function loadCssCode(code){
     var style = document.createElement('style');
     style.type = 'text/css';
@@ -135,8 +134,8 @@ function tagbody(api) {
 	tagbody.setAttribute('onclick', 'tagChecked(this)');
 	tagbody.setAttribute('onmousedown', 'tagbodyMousedown(event)');
 	tagbody.innerHTML='\
-<input name="api" type="text" value="'+api+'" placeholder="请输入api" title="双击访问url" ondblclick="window.open(this.value)" />\
-<textarea name="decription" type="text" value="" placeholder="请输入接口描述"></textarea>\
+<input name="api" type="text" value="'+api+'" placeholder="请输入api" title="双击访问url" onkeydown="event.stopPropagation();" ondblclick="window.open(this.value)" />\
+<textarea name="decription" type="text" value="" onkeydown="event.stopPropagation();" placeholder="请输入接口描述"></textarea>\
 ';
 	return tagbody;
 }
