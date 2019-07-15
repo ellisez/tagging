@@ -200,7 +200,7 @@ if (script) {
 }
 
 loadCssCode('\n\
-.tagbody {\n\
+#tagbody {\n\
 	position: absolute;\n\
 	width: 200px;\n\
 	overflow: visible;\n\
@@ -212,27 +212,27 @@ loadCssCode('\n\
 	box-sizing: border-box;\n\
 	border:4px solid #ececec;\n\
 }\n\
-.tagbody[checked="true"] {\n\
+#tagbody[checked="true"] {\n\
 	border-color:'+defaultColor+';\n\
 	\n\
 }\n\
-.tagbody [name="api"] {\n\
+#tagbody [name="api"] {\n\
 	border:none;\n\
 	background:white;\n\
 	text-decoration: underline;\n\
 	color: blue;\n\
 }\n\
-.tagbody [name="api"]:focus {\n\
+#tagbody [name="api"]:focus {\n\
 	text-decoration: none;\n\
 	color: red;\n\
 }\n\
 \n\
-.tagbody [name="decription"] {\n\
+#tagbody [name="decription"] {\n\
 	background:white;\n\
 	resize: vertical;\n\
 	color: blue;\n\
 }\n\
-.tagbody [name="decription"]:focus {\n\
+#tagbody [name="decription"]:focus {\n\
 	background:none;\n\
 	color: red;\n\
 }\n\
