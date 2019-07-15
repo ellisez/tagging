@@ -1,3 +1,4 @@
+
 function loadCssCode(code){
     var style = document.createElement('style');
     style.type = 'text/css';
@@ -60,7 +61,7 @@ function deg(p1, p2) {
 function lineTo(no, p1, p2, color='blue', api=''){
 	var element = document.getElementById('taggings');
 	
-	var tagging =  element.querySelector('div[no="'+no+'"]');
+	var tagging =  document.querySelector('div[no="'+no+'"]');
 	if (!tagging) {
 		tagging = document.createElement("div");
 		tagging.setAttribute('no', no);
@@ -70,9 +71,8 @@ function lineTo(no, p1, p2, color='blue', api=''){
 		tagging.style.overflow='visible';
 		element.appendChild(tagging);
 	}
-	tagging.style.left = p1.x;
-	tagging.style.top = p1.y;
-	element.appendChild(tagging);
+	tagging.style.left = p1.x+'px';
+	tagging.style.top = p1.y+'px';
 
 	var svg = tagging.querySelector('svg');
 	if (!svg) {
@@ -115,8 +115,8 @@ function lineTo(no, p1, p2, color='blue', api=''){
 		tagging.appendChild(tagElement);
 	}
 	var tagX = endX<0?endX-200:endX;
-	tagElement.style.left=tagX;
-	tagElement.style.top=endY;
+	tagElement.style.left=tagX+'px';
+	tagElement.style.top=endY+'px';
 	tagChecked(tagElement);
 }
 function tagChecked(element) {
@@ -132,20 +132,8 @@ function tagChecked(element) {
 function tagbody(api) {
 	var tagbody = document.createElement('div');
 	tagbody.setAttribute('class', 'tagbody');
-	tagbody.onclick = function() {
-		tagChecked(this);
-	};
-	tagbody.onmousedown = function (event) {
-		if (event.button==2) {
-			event.stopPropagation();
-			var tagElement = findParent(event.target);
-			
-			tagging.x=parseFloat(tagElement.style.left.replace(/(\d+)px/g, '$1'));
-			tagging.y=parseFloat(tagElement.style.top.replace(/(\d+)px/g, '$1'));
-			no = tagElement.getAttribute('no');
-			status = 1;
-		}
-	};
+	tagbody.setAttribute('onclick', 'tagChecked(this)');
+	tagbody.setAttribute('onmousedown', 'tagbodyMousedown(event)');
 	tagbody.innerHTML='\
 <input name="api" type="text" value="'+api+'" placeholder="请输入api" title="双击访问url" ondblclick="window.open(this.value)" />\
 <textarea name="decription" type="text" value="" placeholder="请输入接口描述"></textarea>\
@@ -177,15 +165,31 @@ function urlparams(url) {
 	}
 	return result;
 }
+
+function tagbodyMousedown(event) {
+	if (event.button==2) {
+		event.stopPropagation();
+		var tagElement = findParent(event.target);
+		
+		tagging.x=parseFloat(tagElement.style.left.replace(/(\d+)px/g, '$1'));
+		tagging.y=parseFloat(tagElement.style.top.replace(/(\d+)px/g, '$1'));
+		no = tagElement.getAttribute('no');
+		status = 1;
+	}
+}
+
 (function() {
 
-status = 0;//0 gone,1 doing
-tagging={x:0, y:0};
-no = -1;
-defaultApi='';
-defaultColor='blue';
+//////////////////
+window.status = 0;//0 gone,1 doing
+window.tagging={x:0, y:0};
+window.no = -1;
+window.defaultApi='';
+window.defaultColor='blue';
 
 document.body.style.position = 'relative';
+// document.body.style.width='100%';
+// document.body.style.height='100%';
 
 var element = document.createElement('div');
 element.setAttribute('id', 'taggings');
@@ -200,7 +204,7 @@ if (script) {
 }
 
 loadCssCode('\n\
-#tagbody {\n\
+.tagbody {\n\
 	position: absolute;\n\
 	width: 200px;\n\
 	overflow: visible;\n\
@@ -212,27 +216,27 @@ loadCssCode('\n\
 	box-sizing: border-box;\n\
 	border:4px solid #ececec;\n\
 }\n\
-#tagbody[checked="true"] {\n\
+.tagbody[checked="true"] {\n\
 	border-color:'+defaultColor+';\n\
 	\n\
 }\n\
-#tagbody [name="api"] {\n\
+.tagbody [name="api"] {\n\
 	border:none;\n\
 	background:white;\n\
 	text-decoration: underline;\n\
 	color: blue;\n\
 }\n\
-#tagbody [name="api"]:focus {\n\
+.tagbody [name="api"]:focus {\n\
 	text-decoration: none;\n\
 	color: red;\n\
 }\n\
 \n\
-#tagbody [name="decription"] {\n\
+.tagbody [name="decription"] {\n\
 	background:white;\n\
 	resize: vertical;\n\
 	color: blue;\n\
 }\n\
-#tagbody [name="decription"]:focus {\n\
+.tagbody [name="decription"]:focus {\n\
 	background:none;\n\
 	color: red;\n\
 }\n\
@@ -242,7 +246,7 @@ document.body.onkeydown = function(event) {
 	if (event.keyCode==83&&event.ctrlKey) {
 		event.preventDefault();
 		saveFile(document.documentElement.innerHTML);
-	} else if (event.keyCode==46) {
+	} else if (event.keyCode==46||event.keyCode==8) {
 		var currentTagbody = document.querySelector('.tagbody[checked]');
 		currentTagbody = findParent(currentTagbody);
 		if (currentTagbody) {
